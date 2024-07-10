@@ -6,6 +6,6 @@ The folder abaqus contains file for data extraction from Abaqus output files.
 - the `get_pressure.py` file extracts the pressure values from the output file.
 - The `get_velocity.py` file extracts the velocity values from the output file.
 - the `get_vorticity.py` file extracts the vorticity values from the output file.
-- The `inp2vtk.py` file converts the inp file to vtk file.
+- The `inp2vtk.py` file converts the inp file to vtk file with data written from the above files.
 
-The DMD folder contains the DMD code for the data extracted from the Abaqus output files.
+The DMD folder contains the DMD code for the data extracted from the Abaqus output files. It plots the DMD modes and the mode spectrum.
