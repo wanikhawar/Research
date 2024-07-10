@@ -1,5 +1,7 @@
-inp = open('NLPFEH_COUPLED_01MS_T350-fluid_domain.inp', 'r')
-coords_file = open('GD0p1_coords.csv', 'w')
+# Extracts the coordinates of the nodes from an Abaqus input file and writes them to a csv file
+
+inp = open('input_filename.inp', 'r')
+coords_file = open('coordinate_filename.csv', 'w')
 
 lines = inp.readlines()
 
