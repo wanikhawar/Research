@@ -19,6 +19,8 @@ with open("velocity_x.dat", "w") as vx_f, open("velocity_y.dat", "w") as vy_f:
         # Extract the velocity data for the current frame
         velocities = fs[i].fieldOutputs["V"].values
 
+        print("WRITING STEP {0} DATA".format(i))
+
         # Use str.format() to format the output string
         vx_f.write(
             ",".join("{:.6f}".format(velocity.data[0]) for velocity in velocities)
