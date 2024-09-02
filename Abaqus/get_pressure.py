@@ -1,22 +1,27 @@
 # Extract pressure data from an Abaqus ODB file and write it to a file
 
-from odbAccess import *
 from abaqusConstants import *
+from odbAccess import *
 from odbMaterial import *
 from odbSection import *
-import numpy as np
 
 # Open ODB
-odb = openOdb(path='odb_filename.odb')
+odb = openOdb(path="odb_filename.odb")
 
 # Frames
-fs = odb.steps['step_name'].frames # name of the step
+fs = odb.steps["step_name"].frames  # name of the step
 
-start_frame = 600
+START_FRAME = 600
+END_FRAME = len(fs)
 
-# Open a file pressure.dat in write mode
-with open('pressure.dat', 'w+') as f:
-    # Create a list of pressure values for each frame
-    pressures = [[pressure.data for pressure in fs[i].fieldOutputs['PRESSURE'].values] for i in range(start_frame, len(fs))]
-    # Write pressures to file
-    np.savetxt(f, pressures, delimiter=',')
+with open("pressure.dat", "w") as f:
+    for i in range(START_FRAME, END_FRAME):
+        # Extract the pressure data for the current frame
+        pressures = fs[i].fieldOutputs["PRESSURE"].values
+
+        print("WRITING STEP {0} DATA".format(i))
+
+        # Write pressures to file
+        f.write(
+            ",".join("{:.6f}".format(pressure.data) for pressure in pressures) + "\n"
+        )
