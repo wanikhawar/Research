@@ -1,29 +1,34 @@
 # extracts velocity data from an ODB file and writes it to two files, velocity_x.dat and velocity_y.dat
 
-from odbAccess import *
+import numpy as np
 from abaqusConstants import *
+from odbAccess import *
 from odbMaterial import *
 from odbSection import *
-import numpy as np
 
 # Open ODB
-odb = openOdb(path='odb_filename.odb')
+odb = openOdb(path="odb_filename.odb")
 
 # Frames
-fs = odb.steps['step_name'].frames
+fs = odb.steps["step_name"].frames
 
 start_frame = 600
 
 # Open files velocity_x.dat and velocity_y.dat in write mode
-with open('velocity_x.dat', 'w+') as vx_f, open('velocity_y.dat', 'w+') as vy_f:
+with open("velocity_x.dat", "w+") as vx_f, open("velocity_y.dat", "w+") as vy_f:
     # Iterate over frames in 'flow' step
     for i in range(start_frame, len(fs)):
-        # Create dictionary of node labels and x and y velocities
-        vel = {velocity.nodeLabel: velocity.data[:2] for velocity in fs[i].fieldOutputs['V'].values}
+        # Extract the velocity data for the current frame
+        velocities = fs[i].fieldOutputs["V"].values
+
+        # Pre-allocate lists for x and y velocities
+        velxs = np.empty(len(velocities))
+        velys = np.empty(len(velocities))
+
+        # Populate the lists directly
+        for j, velocity in enumerate(velocities):
+            velxs[j], velys[j] = velocity.data[:2]
+
         # Write velocities to files
-        velxs = np.array(list(vel.values()))[:, 0]
-        velys = np.array(list(vel.values()))[:, 1]
-        vx_f.write(','.join(map(str, velxs)) + '\n')
-        vy_f.write(','.join(map(str, velys)) + '\n')
-
-
+        np.savetxt(vx_f, velxs[None], delimiter=",", fmt="%f")
+        np.savetxt(vy_f, velys[None], delimiter=",", fmt="%f")
